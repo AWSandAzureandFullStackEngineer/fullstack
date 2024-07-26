@@ -36,3 +36,34 @@ jobs:
 
       - name: Test
         run: go test ./...
+
+  deploy:
+    needs:
+      - build
+      - test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: steven8519/backend:LP1
+
+      - name: Set up Kubernetes
+        uses: Azure/setup-kubectl@v1
+        with:
+          version: 'v1.18.14'
+
+      - name: Deploy to AKS
+        run: |
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
