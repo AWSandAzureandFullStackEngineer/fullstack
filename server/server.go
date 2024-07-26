@@ -9,5 +9,5 @@ func Start() {
 
 func HelloServer(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("hello server!"))
+	w.Write([]byte("hello server test!"))
 }

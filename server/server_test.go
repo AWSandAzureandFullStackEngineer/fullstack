@@ -28,7 +28,7 @@ func TestHelloServer(t *testing.T) {
 	}
 
 	// Check the response body
-	expected := "hello server!"
+	expected := "hello server test!"
 	body, err := ioutil.ReadAll(rr.Body)
 	if err != nil {
 		t.Fatal(err)
